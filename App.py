@@ -45,11 +45,11 @@ def data2AnkiTxt(data,withmedia=False):
             AnkiText += H3_tag("造句")
             for k in i["Sentence"]:
                 AnkiText += p_tag(k)
+            AnkiText += '</div>'
             if withmedia:
                 AnkiText += '\t'
                 AnkiText += AnkiSoundTag(i["Vol"])
             AnkiText += "\n"
-            AnkiText += '</div>'
         except:
             AnkiText += "查無資料\n"
             AnkiText += "\n"
