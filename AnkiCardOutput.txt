@@ -1,0 +1,5 @@
+
+#separator:tab
+#html:true
+<h2>apple</h2>	<div class="RduanCard"><p>fruit firm white flesh green red yellow skin </p><p>[n.] 蘋果[C]</p><h3>造句</h3><p>to peel an apple</p><p>apple pie/sauce</p><p>an apple tree</p>	[sound:RduanCard_apple.mp3]
+</div>
