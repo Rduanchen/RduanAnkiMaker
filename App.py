@@ -3,6 +3,8 @@ import requests
 from bs4 import BeautifulSoup
 import os
 import zipfile
+import subprocess
+from threading import Timer
 
 current_path = os.path.dirname(__file__)
 os.chdir(current_path)
@@ -90,9 +92,6 @@ def zip_folder():
     print("壓縮完成")
 
 @app.route("/")
-# def hello():
-#     return "Hello, World!"
-# @app.route("/home")
 def MainPage():
     return render_template('./Main.html')
 
@@ -232,5 +231,14 @@ def media():
 @app.route('/api/ankitxt', methods=['GET'])
 def ankitxt():
     return send_from_directory(current_path, "AnkiCardOutput.txt", as_attachment=True)
-if __name__ == '__main__':
+
+def start_flask():
+    # 启动 Flask 应用
     app.run()
+
+def oppen_browser():
+    # 打开浏览器
+    subprocess.Popen(['start', '', 'http:127.0.0.1:5990'], shell=True)
+if __name__ == '__main__':
+    Timer(1,oppen_browser).start()
+    app.run(port=5990)

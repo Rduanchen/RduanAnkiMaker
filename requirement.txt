@@ -1,5 +1,0 @@
-os
-flask
-requests
-beautifulsoup4
-zipfile

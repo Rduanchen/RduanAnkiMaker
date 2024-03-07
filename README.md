@@ -1,5 +1,5 @@
 # RduanAnkiMaker 
-> V.0.1.0
+> V.0.1.1
 ![alt text](image.png)
 ## 簡介
 RduanAnkiMaker 是一個用來製作 Anki 卡片的工具，安裝完之後，只需要輸入您想輸入的音文字母，就可以自動製作含有英文定義、翻譯、造句、音訊等資料的 Anki txt 檔案，您只需要將其匯入到Anki即可
@@ -50,3 +50,10 @@ On Linux, recent Anki versions store your data in ~/.local/share/Anki2, or $XDG_
 2. 更多下載/輸出選項
 3. 自動匯入到Anki
 4. 打包成.exe
+
+# 版本歷程
+* 0.1.0
+    * 第一個版本
+* 0.1.1
+    * 修改了一些錯誤
+    * 自動打開瀏覽器
