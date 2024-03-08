@@ -1,4 +1,4 @@
 
 #separator:tab
 #html:true
-<h2>apple</h2>	<div class="RduanCard"><p>fruit firm white flesh green red yellow skin </p><p>[n.] 蘋果[C]</p><h3>造句</h3><p>to peel an apple</p><p>apple pie/sauce</p><p>an apple tree</p></div>	[sound:RduanCard_apple.mp3]
+<h2>walk</h2>[sound:RduanAnkiRduanCard_walk.mp3]	<div class="RduanCard"><p>move foot front allowing foot touch ground lifting </p><p>[vi.] 走；散步；（鬼魂）出現</p><p>[vt.] 走過，走遍；沿……走；陪……走；幫助（某人）走[O]</p><p>[n.] 走；步行；散步[C]；步行距離[S]</p><h3>造句</h3><p>I walked home.</p><p>A cat was walking along the top of the fence.</p><p>He walks two miles to work every morning.</p></div>

@@ -1,23 +1,24 @@
-from flask import Flask, render_template, request, jsonify, send_from_directory
+from flask import Flask, render_template, request, jsonify, send_from_directory, send_file
 import requests
 from bs4 import BeautifulSoup
 import os
 import zipfile
 import subprocess
 from threading import Timer
+import io
 
 current_path = os.path.dirname(__file__)
 os.chdir(current_path)
+
+zip_buffer_download = io.BytesIO()
 
 # 進入專案資料
 app = Flask(__name__)
 
 def H2_tag(text):
     return f"<h2>{text}</h2>"
-
 def H3_tag(text):
     return f"<h3>{text}</h3>"
-
 def p_tag(text):
     return f"<p>{text}</p>"
 def br():
@@ -26,7 +27,7 @@ def hr():
     return "<hr>"
 def AnkiSoundTag(src):
     src="RduanCard_"+src
-    return f"[sound:{src}.mp3]"
+    return f"[sound:RduanAnki{src}.mp3]"
 
 def data2AnkiTxt(data,withmedia=False):
     # 原文會成為卡片正面，翻譯會成為卡片背面
@@ -37,7 +38,10 @@ def data2AnkiTxt(data,withmedia=False):
 '''
     for i in data:
         try:
-            AnkiText += H2_tag(i["Vol"]) + "\t" 
+            AnkiText += H2_tag(i["Vol"])
+            if withmedia:
+                AnkiText += AnkiSoundTag(i["Vol"])
+            AnkiText += '\t'
             AnkiText += '<div class="RduanCard">'
             AnkiText += p_tag(i["def"])
             for j in i["Translate"]:
@@ -46,9 +50,6 @@ def data2AnkiTxt(data,withmedia=False):
             for k in i["Sentence"]:
                 AnkiText += p_tag(k)
             AnkiText += '</div>'
-            if withmedia:
-                AnkiText += '\t'
-                AnkiText += AnkiSoundTag(i["Vol"])
             AnkiText += "\n"
         except:
             AnkiText += "查無資料\n"
@@ -65,35 +66,32 @@ def EmptyFolder():
             os.remove(os.path.join(root, file))
     print("清空完成")
 
-def MakeMP3File(word):
-    url = "https://s.yimg.com/bg/dict/dreye/live/m/{}.mp3".format(word)
-    save_path = "RduanAnki_{}.mp3".format(word)
-    try:
-        # 发送 GET 请求获取 MP3 文件
-        response = requests.get(url)
-        if response.status_code == 200:
-            # 将文件写入本地
-            with open("./media/"+save_path, 'wb') as f:
-                f.write(response.content)
-            print("MP3 文件下载成功")
-        else:
-            print("無法下載文件，錯誤碼:", response.status_code)
-    except Exception as e:
-        print("下載時出錯", str(e))
-
-    
-def zip_folder():
-    # 將./media 資料夾壓縮成 media.zip
-    zipf = zipfile.ZipFile('media.zip', 'w', zipfile.ZIP_DEFLATED)
-    for root, dirs, files in os.walk('./media'):
-        for file in files:
-            zipf.write(os.path.join(root, file))
-    zipf.close()
-    print("壓縮完成")
-
+def MakeMP3File(word, zip_buffer):
+    with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zipf:
+        for i in word:
+            url = "https://s.yimg.com/bg/dict/dreye/live/m/{}.mp3".format(i)
+            try:
+                # 發送 GET 請求獲取 MP3 文件
+                response = requests.get(url)
+                if response.status_code == 200:
+                    # 將文件寫入 zip buffer 中
+                    zipf.writestr("RduanAnki{}.mp3".format(i), response.content)
+                    print("MP3 文件下載成功")
+                else:
+                    print("無法下載文件，錯誤碼:", response.status_code)
+            except Exception as e:
+                print("下載時出錯", str(e))
 @app.route("/")
 def MainPage():
     return render_template('./Main.html')
+
+@app.route('/api/ankitxt', methods=['GET'])
+def ankitxt():
+    return send_from_directory(current_path, "AnkiCardOutput.txt", as_attachment=True)
+
+def start_flask():
+    # 启动 Flask 应用
+    app.run()
 
 @app.route('/api', methods=['POST'])
 # 不含音訊檔案
@@ -161,9 +159,8 @@ def api():
     return jsonify(res) # 回傳翻譯結果
 
 @app.route('/api/media', methods=['POST'])
+# 下載media(含有音訊檔)
 def media():
-    print("Hi")
-    EmptyFolder()
     data = request.json
     res = {
         "Translate": [],
@@ -175,6 +172,7 @@ def media():
         "def": "",
         "Sentence": [],
     }
+    validate_word=[]
     for i in data["Vol"]:
         try:
             # Yahoo 翻譯: 詞性 + 翻譯
@@ -211,6 +209,7 @@ def media():
                 else:
                     break
             appen_data["Vol"] = i
+            validate_word.append(i) # 下載音訊使用
             res["Translate"].append(appen_data)
             appen_data = {
                 "Vol": "",
@@ -218,23 +217,28 @@ def media():
                 "def": "",
                 "Sentence": [],
             }
-            MakeMP3File(i)
         except:
             res["Translate"].append({
                 "Vol": i,
                 "Translate": "error",
             })
+    MakeMP3File(validate_word,zip_buffer_download)
     a=data2AnkiTxt(res["Translate"],withmedia=True)
     return jsonify(res) # 回傳翻譯結果
 
 
-@app.route('/api/ankitxt', methods=['GET'])
-def ankitxt():
-    return send_from_directory(current_path, "AnkiCardOutput.txt", as_attachment=True)
+@app.route('/api/download',methods=['GET'])
+def download():
+    # 創建一個 BytesIO 對象來存儲壓縮後的音訊檔案
+    # MakeMP3File(words, zip_buffer)
+    zip_buffer_download.seek(0)  # 將游標移動到文件的開頭
+    return send_file(
+        zip_buffer_download,
+        as_attachment=True,
+        download_name='media.zip',
+        mimetype='application/zip'
+    )
 
-def start_flask():
-    # 启动 Flask 应用
-    app.run()
 
 def oppen_browser():
     # 打开浏览器

@@ -51,6 +51,7 @@
                 </div>
             </div>
             <button class="btn btn-primary m-3"><a href="../api/ankitxt" target="_blank" class="text-white">下載文字檔</a></button>
+            <button class="btn btn-primary m-3"><a href="../api/download" target="_blank" class="text-white">下載音訊檔(zip)</a></button>
         </div>
         
     </div>
@@ -62,7 +63,8 @@
         data() {
             return {
                 Vol : [''],
-                res : null
+                res : null,
+                media_click :false
             }
         },
         methods: {
@@ -73,6 +75,7 @@
                 this.Vol.splice(key,1)
             },
             sentData() {
+                media_click = false;
                 console.log(this.Vol)
                 axios.post('/api', {
                     Vol: this.Vol
@@ -87,7 +90,9 @@
                     console.error(error);
                 });
             },
+            // 含有media
             sentData2(){
+                media_click = true;
                 console.log(this.Vol)
                 axios.post('/api/media', {
                     Vol: this.Vol
