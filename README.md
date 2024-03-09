@@ -84,6 +84,7 @@ https://docs.ankiweb.net/templates/styling.html
 2. 支援更多輸入方式
 3. 支援更多卡片樣式
 4. 支援macOS exe打包
+5. 調整輸出方式
 
 # 版本歷程
 * 0.1.0
