@@ -1,6 +1,11 @@
 # RduanAnkiMaker 
 > V.0.1.1
 ![alt text](https://raw.githubusercontent.com/Rduanchen/RduanAnkiMaker/main/image.png)
+
+## Hotproblem
+1. 刪除單字的按鈕有問題
+2. 音訊檔案的命名格式不正確
+
 ## 簡介
 RduanAnkiMaker 是一個用來製作 Anki 卡片的工具，安裝完之後，只需要輸入您想輸入的音文字母，就可以自動製作含有英文定義、翻譯、造句、音訊等資料的 Anki txt 檔案，您只需要將其匯入到Anki即可
 
