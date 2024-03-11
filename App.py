@@ -26,7 +26,6 @@ def br():
 def hr():
     return "<hr>"
 def AnkiSoundTag(src):
-    src="RduanCard_"+src
     return f"[sound:RduanAnki{src}.mp3]"
 
 def data2AnkiTxt(data,withmedia=False):

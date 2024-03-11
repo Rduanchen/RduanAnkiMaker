@@ -1,4 +1,5 @@
-
 #separator:tab
 #html:true
-<h2>walk</h2>[sound:RduanAnkiRduanCard_walk.mp3]	<div class="RduanCard"><p>move foot front allowing foot touch ground lifting </p><p>[vi.] 走；散步；（鬼魂）出現</p><p>[vt.] 走過，走遍；沿……走；陪……走；幫助（某人）走[O]</p><p>[n.] 走；步行；散步[C]；步行距離[S]</p><h3>造句</h3><p>I walked home.</p><p>A cat was walking along the top of the fence.</p><p>He walks two miles to work every morning.</p></div>
+<h2>fridge</h2>[sound:RduanAnkifridge.mp3]	<div class="RduanCard"><p>piece kitchen equipment electricity preserve food cold temperature</p><p>[n.] 【英】【口】電冰箱</p><h3>造句</h3><p>Don't forget to put the milk back in the fridge.</p></div>
+<h2>apple</h2>[sound:RduanAnkiapple.mp3]	<div class="RduanCard"><p>fruit firm white flesh green red yellow skin</p><p>[n.] 蘋果[C]</p><h3>造句</h3><p>to peel an apple</p><p>apple pie/sauce</p><p>an apple tree</p></div>
+<h2>robot</h2>[sound:RduanAnkirobot.mp3]	<div class="RduanCard"><p>machine controlled computer perform jobs automatically</p><p>[n.[C]] 機器人；自動控制裝置；遙控裝置；機械呆板的人，機器般工作的人</p><h3>造句</h3><p>The surgery can be carried out by robots.</p><p>a bomb disposal robot</p></div>

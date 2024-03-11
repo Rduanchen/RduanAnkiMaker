@@ -24,7 +24,7 @@
             <div class="d-flex flex-row justify-content-start" v-for="(items,key) in Vol" :key="key">
                 <input type="text" class="form-control VolInput m-3" id="Vol" placeholder="輸入單字" v-model="Vol[key]">
                 <!-- 刪除卡片 -->
-                <button class="btn btn-danger m-3 text-nowrap" @click="deleteCard" v-if="key!=0">刪除</button>
+                <button class="btn btn-danger m-3 text-nowrap" @click="deleteCard(key)" v-if="key!=0">刪除</button>
             </div>
         </div>
         <button class="btn btn-primary m-3" @click="addCard">新增</button>
