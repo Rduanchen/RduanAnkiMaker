@@ -32,7 +32,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: output_app
-        path: output_app/
+        path: output_app/App.exe
 
   release-projects:
     runs-on: windows-latest
