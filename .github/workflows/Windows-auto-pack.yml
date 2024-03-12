@@ -52,7 +52,8 @@ jobs:
     - name: Create .app
       run: |
         pyinstaller --noconfirm --distpath macos-app --onefile --console --add-data "./templates:templates/" "./App.py"
-        ls macos-app
+        ls
+        ls macos-app/App
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
