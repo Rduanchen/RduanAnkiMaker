@@ -59,7 +59,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: macos-app
-        path: macos-app/App.app
+        path: macos-app/App.pkg
         retention-days: 1
 
   # release:
