@@ -37,7 +37,7 @@ jobs:
   release-projects:
     runs-on: windows-latest
     needs: auto-pack
-    seps:
+    steps:
     - name: download artifact
       uses : thedoctor0/zip-release@master
       with:
