@@ -1,30 +1,52 @@
-name: Windows Package python
+name: Windows Package Python
+
 on:
   push:
     branches:
-    - main
+      - main
+
 jobs:
   auto-pack:
     runs-on: windows-latest
+    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: install python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10' 
-      - name: install requirements
-        run: pip install -r requirements.txt
-      - name: Install pyinstaller
-        run: pip install pyinstaller
-      - name: pack exe file
-        run: |
-          pyinstaller --noconfirm --distpath output --onefile --console --add-data "./templates;templates/"  "./App.py"
-      - name: Upload artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: exe-file
-          path: output/App.exe
+    - name: Checkout  
+      uses: actions/checkout@v3
       
+    - name: Install Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
         
+    - name: Install requirements
+      run: pip install -r requirements.txt
+      
+    - name: Install pyinstaller
+      run: pip install pyinstaller
+      
+    - name: Pack exe file
+      run: |  
+        pyinstaller --noconfirm --distpath output --onefile --console --add-data "./templates;templates/" "./App.py"
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: exe-file
+        path: output/App.exe
+        
+    # 可選的 Release 步驟
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: output/App.exe
+        
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_path: ./output/App.exe
+        asset_name: App.exe
+        asset_content_type: application/vnd.microsoft.portable-executable
     
