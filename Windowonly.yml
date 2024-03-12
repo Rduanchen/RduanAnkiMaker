@@ -53,8 +53,7 @@ jobs:
     - name: Create .app
       run: |
         python setup.py py2app
-        ls macos-app/App
-        ls macos-app
+        ls dist
         
     - name: Upload artifact
       uses: actions/upload-artifact@v3
