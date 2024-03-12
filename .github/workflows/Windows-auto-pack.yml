@@ -41,6 +41,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         release_name: Release ${{ github.ref }}
+        tag_name: ${{ github.run_number }}
         draft: false
         prerelease: false
 
