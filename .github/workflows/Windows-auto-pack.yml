@@ -1,5 +1,4 @@
 name: Windows Package Python
-
 on:
   push:
     branches:
@@ -8,38 +7,42 @@ on:
 jobs:
   auto-pack:
     runs-on: windows-latest
-    
+
     steps:
-    - name: Checkout  
+    - name: Checkout
       uses: actions/checkout@v3
-      
+
     - name: Install Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-        
+
     - name: Install requirements
       run: pip install -r requirements.txt
-      
+
     - name: Install pyinstaller
       run: pip install pyinstaller
-      
+
     - name: Pack exe file
-      run: |  
+      run: |
         pyinstaller --noconfirm --distpath output --onefile --console --add-data "./templates;templates/" "./App.py"
-        
+
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: exe-file
         path: output/App.exe
-        
-    # 可選的 Release 步驟
+
+    - name: Get current date
+      id: date
+      run: echo "::set-output name=date::$(date +'%Y%m%d%H%M%S')"
+
     - name: Create Release
       uses: softprops/action-gh-release@v1
       with:
+        tag_name: release-${{ steps.date.outputs.date }}
         files: output/App.exe
-        
+
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
@@ -49,4 +52,3 @@ jobs:
         asset_path: ./output/App.exe
         asset_name: App.exe
         asset_content_type: application/vnd.microsoft.portable-executable
-    
