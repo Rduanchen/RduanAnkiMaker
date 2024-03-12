@@ -19,7 +19,7 @@ jobs:
         run: pip install pyinstaller
       - name: pack exe file
         run: |
-          pyinstaller --noconfirm --onedir --console --add-data "./templates;templates/"  "./App.py"
+          pyinstaller --noconfirm --distpath output --onefile --console --add-data "./templates;templates/"  "./App.py"
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
