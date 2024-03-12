@@ -7,7 +7,7 @@ on:
 
 jobs:
 
-  auto-pack:
+  build-windows:
     runs-on: windows-latest
     
     steps:
@@ -34,16 +34,43 @@ jobs:
       with:
         name: output_app
         path: output_app/App.exe
-        
-  release-projects:
-    runs-on: windows-latest
-    needs: auto-pack
-    
+
+  build-macos:
+    runs-on: macos-latest
+
     steps:
-    - name: Download artifact
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.10
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+    - name: Create .app
+      run: pyinstaller --noconfirm --distpath output_app --onefile --console --add-data "./templates;templates/" "./App.py"
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: macos-app
+        path: dist/App.app
+
+  release:
+    needs: [build-windows, build-macos]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Download Windows artifact
       uses: actions/download-artifact@v3
       with:
         name: output_app
+    - name: Download macOS artifact  
+      uses: actions/download-artifact@v3
+      with:
+        name: macos-app
+        
     - name: List downloaded files
       run: ls -R
         
