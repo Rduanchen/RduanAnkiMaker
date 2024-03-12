@@ -50,12 +50,15 @@ jobs:
         pip install pyinstaller
         pip install -r requirements.txt
     - name: Create .app
-      run: pyinstaller --noconfirm --distpath macos-app --onefile --console --add-data "./templates:templates/" "./App.py"
+      run: |
+        pyinstaller --noconfirm --distpath macos-app --onefile --console --add-data "./templates:templates/" "./App.py"
+        ls macos-app
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
         name: macos-app
         path: macos-app/App.app
+        retention-days: 1
 
   release:
     needs: [build-windows, build-macos]
