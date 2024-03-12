@@ -7,33 +7,33 @@ on:
 
 jobs:
 
-  build-windows:
-    runs-on: windows-latest
+  # build-windows:
+  #   runs-on: windows-latest
     
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+  #   steps:
+  #   - name: Checkout
+  #     uses: actions/checkout@v4
       
-    - name: install python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.10'
+  #   - name: install python
+  #     uses: actions/setup-python@v5
+  #     with:
+  #       python-version: '3.10'
         
-    - name: install requirements
-      run: pip install -r requirements.txt
+  #   - name: install requirements
+  #     run: pip install -r requirements.txt
         
-    - name: Install pyinstaller
-      run: pip install pyinstaller
+  #   - name: Install pyinstaller
+  #     run: pip install pyinstaller
         
-    - name: pack exe file
-      run: |
-        pyinstaller --noconfirm --distpath output_app --onefile --console --add-data "./templates;templates/" "./App.py"
+  #   - name: pack exe file
+  #     run: |
+  #       pyinstaller --noconfirm --distpath output_app --onefile --console --add-data "./templates;templates/" "./App.py"
         
-    - name: Upload artifact
-      uses: actions/upload-artifact@v3
-      with:
-        name: output_app
-        path: output_app/App.exe
+  #   - name: Upload artifact
+  #     uses: actions/upload-artifact@v3
+  #     with:
+  #       name: output_app
+  #       path: output_app/App.exe
 
   build-macos:
     runs-on: macos-latest
@@ -52,8 +52,9 @@ jobs:
     - name: Create .app
       run: |
         pyinstaller --noconfirm --distpath macos-app --onefile --console --add-data "./templates:templates/" "./App.py"
-        ls
         ls macos-app/App
+        ls macos-app
+        
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
@@ -61,38 +62,38 @@ jobs:
         path: macos-app/App.app
         retention-days: 1
 
-  release:
-    needs: [build-windows, build-macos]
-    runs-on: ubuntu-latest
+  # release:
+  #   needs: [build-windows, build-macos]
+  #   runs-on: ubuntu-latest
 
-    steps:
-    - name: Download Windows artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: output_app
-    - name: Download macOS artifact  
-      uses: actions/download-artifact@v3
-      with:
-        name: macos-app
+  #   steps:
+  #   - name: Download Windows artifact
+  #     uses: actions/download-artifact@v3
+  #     with:
+  #       name: output_app
+  #   - name: Download macOS artifact  
+  #     uses: actions/download-artifact@v3
+  #     with:
+  #       name: macos-app
         
-    - name: List downloaded files
-      run: ls -R
+  #   - name: List downloaded files
+  #     run: ls -R
         
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.run_number }}
-        release_name: Release ${{ github.run_number }}
+  #   - name: Create Release
+  #     id: create_release
+  #     uses: actions/create-release@v1
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     with:
+  #       tag_name: ${{ github.run_number }}
+  #       release_name: Release ${{ github.run_number }}
         
-    - name: Upload release files
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./App.exe
-        asset_name: RduanAnkiMaker-v${{ github.run_number }}.exe
-        asset_content_type: application/octet-stream
+  #   - name: Upload release files
+  #     uses: actions/upload-release-asset@v1
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     with:
+  #       upload_url: ${{ steps.create_release.outputs.upload_url }}
+  #       asset_path: ./App.exe
+  #       asset_name: RduanAnkiMaker-v${{ github.run_number }}.exe
+  #       asset_content_type: application/octet-stream
