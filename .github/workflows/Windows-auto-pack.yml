@@ -33,11 +33,21 @@ jobs:
       with:
         name: output_app
         path: output_app/
+
+  release-projects:
+    runs-on: windows-latest
+    needs: auto-pack
+    seps:
+    - name: download artifact
+      uses : thedoctor0/zip-release@master
+      with:
+        filename: output_app.zip
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        release_name: Release ${{ github.run_number }}
         tag_name: ${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
+        
