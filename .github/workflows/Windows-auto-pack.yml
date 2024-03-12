@@ -26,32 +26,18 @@ jobs:
 
     - name: pack exe file
       run: |
-        pyinstaller --noconfirm --distpath output --onefile --console --add-data "./templates;templates/" "./App.py"
+        pyinstaller --noconfirm --distpath output_app --onefile --console --add-data "./templates;templates/" "./App.py"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: exe-file
-        path: output/App.exe
-
+        name: output_app
+        path: output_app/
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        release_name: Release ${{ github.ref }}
+        release_name: Release ${{ github.run_number }}
         tag_name: ${{ github.run_number }}
-        draft: false
-        prerelease: false
-
-    - name: Upload Release Asset
-      id: upload-release-asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./output/App.exe
-        asset_name: App.exe
-        asset_content_type: application/vnd.microsoft.portable-executable
