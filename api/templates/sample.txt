@@ -1,0 +1,17 @@
+.card {
+    font-family: arial;
+    font-size: 20px;
+    text-align: center;
+    color: black;
+    background-color: white;
+		 display: flex;
+		 flex-direction: column;
+	  justify-content: center;
+}
+.RduanCard{
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	text-align: start;
+	align-items: flex-start;
+}
