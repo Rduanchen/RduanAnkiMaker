@@ -7,8 +7,8 @@ import subprocess
 from threading import Timer
 import io
 
-current_path = os.path.dirname(__file__)
-os.chdir(current_path)
+# current_path = os.path.dirname(__file__)
+# os.chdir(current_path)
 
 zip_buffer_download = io.BytesIO()
 
@@ -240,9 +240,9 @@ def download():
     )
 
 
-def oppen_browser():
-    # 打开浏览器
-    subprocess.Popen(['start', '', 'http:127.0.0.1:5990'], shell=True)
-if __name__ == '__main__':
-    Timer(1,oppen_browser).start()
-    app.run(port=5990)
+# def oppen_browser():
+#     # 打开浏览器
+#     subprocess.Popen(['start', '', 'http:127.0.0.1:5990'], shell=True)
+# if __name__ == '__main__':
+#     Timer(1,oppen_browser).start()
+#     app.run(port=5990)
