@@ -1,0 +1,3 @@
+#separator:tab
+#html:true
+<h2 class="Vol">card</h2>	<div class="RduanCard"><p class="EngDefination">small rectangular piece plastic your signature photograph information proving allows payment money bank enter particular place</p><div class="ChineseDefination"><p class="Type">n.</p>紙牌[C]；紙牌遊戲[P]</div><div class="ChineseDefination"><p class="Type">vt.</p>把……記入卡片</div><div class="SampleSentence"><h3 class="SentenceTitle">造句</h3><p class="Sentence">I don't have any cash - can I put this on (= pay using) my (credit/charge) card?</p><p class="Sentence">A lot of shops won't accept cheques unless you have a cheque card with you.</p><p class="Sentence">The bank's closed now, but I can get some money out with my (cash) card.</p></div></div>

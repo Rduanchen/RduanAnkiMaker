@@ -28,8 +28,8 @@ sentence_limit = 3
 def start_flask():
     app.run()
 
-def get_tags(tag, text):
-    return f"<{tag}>{text}</{tag}>"
+def get_tags(tag, text, className=""):
+    return f'''<{tag} class="{ className }">{text}</{tag}>'''
 
 def AnkiSoundTag(src):
     return f"[sound:RduanAnki{src}.mp3]"
@@ -38,15 +38,17 @@ def data2AnkiTxt(data, withmedia=False):
     AnkiText = "#separator:tab\n#html:true\n"
     for item in data:
         try:
-            AnkiText += get_tags("h2", item["Vol"])
+            AnkiText += get_tags("h2", item["Vol"], "Vol")
             if withmedia:
                 AnkiText += AnkiSoundTag(item["Vol"])
             AnkiText += "\t"
             AnkiText += '<div class="RduanCard">'
-            AnkiText += get_tags("p", item["def"])
-            AnkiText += "".join([get_tags("p", translate) for translate in item["Translate"]])
-            AnkiText += get_tags("h3", "造句")
-            AnkiText += "".join([get_tags("p", sentence) for sentence in item["Sentence"]])
+            AnkiText += get_tags("p", item["def"], "EngDefination")
+            AnkiText += "".join([get_tags("div", translate, "ChineseDefination") for translate in item["Translate"]])
+            AnkiText += '''<div class="SampleSentence">'''
+            AnkiText += get_tags("h3", "造句", "SentenceTitle")
+            AnkiText += "".join([get_tags("p", sentence, "Sentence") for sentence in item["Sentence"]])
+            AnkiText += "</div>"
             AnkiText += '</div>\n'
         except:
             AnkiText += "查無資料\n\n"
@@ -80,7 +82,8 @@ def get_translation(word, result_queue):
     yahoo_response = requests.get(yahoo_url, headers=headers)
     yahoo_soup = BeautifulSoup(yahoo_response.text, 'html.parser')
     vol_types = [tag.text for tag in yahoo_soup.find_all('div', class_='pos_button fz-14 fl-l mr-12')]
-    translations = [f"[{vol_type}] {tag.text}" for vol_type, tag in zip(vol_types, yahoo_soup.find_all('div', class_='dictionaryExplanation'))]
+
+    translations = [f"{get_tags('p',vol_type,'Type')}{tag.text}" for vol_type, tag in zip(vol_types, yahoo_soup.find_all('div', class_='dictionaryExplanation'))]
 
     # Cambridge 翻譯
     cambridge_url = f'https://dictionary.cambridge.org/zht/%E8%A9%9E%E5%85%B8/%E8%8B%B1%E8%AA%9E-%E6%BC%A2%E8%AA%9E-%E7%B9%81%E9%AB%94/{word}'

@@ -49,7 +49,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                     <h1 class="card-title">${items.Vol}</h1>
                     <h3>${items.def}</h3>
                     <div class="val" v-for="x in items.Translate">
-                        <p class="card-text">${x}</p>
+                        <div v-html="x"></div>
                     </div>
                     <br>
                     <p>造句</p>
