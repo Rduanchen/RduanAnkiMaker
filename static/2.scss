@@ -1,0 +1,86 @@
+$cyberborder: #FCEE09;
+body{
+    background-color: #000;
+    color: white;
+}
+button{
+    background-color: #000;
+    color: white;
+    border: 1px solid $cyberborder;
+}
+.offcanvas{
+    background-color: #000;
+    color: white;
+    select,input{
+        background-color: #000;
+        color: white;
+    }
+}
+.navbar{
+    background-color: #000 !important;
+    padding: 1em;
+    height: 10vh;
+    margin-bottom: 3vh;
+    color: white;
+    button{
+        background-color: #000;
+        color: white;
+        border: 1px solid $cyberborder;
+        width: 5rem;
+        height: 3rem;
+    }
+}
+.Container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2em;
+    .VolInput{
+        width: 20%;
+        padding: 0.5em;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        textarea{
+            height: 90%;
+            margin-bottom: 1em;
+            background-color: #000;
+            color: white;
+        }
+    }
+    .OutPutWords::-webkit-scrollbar {
+        display: none;
+    }
+    .OutPutWords{
+        width: 70%;
+        // border: solid;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        overflow: auto;
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+        gap: 2rem;
+        .Info{
+            .h2{
+                justify-self: start;
+            }
+            display: flex;
+            justify-content: space-evenly;
+            padding: 0.5em;
+            background-color: #000;
+            color: white;
+        }
+        .TranslateCard{
+            border: solid;
+            padding: 0.5rem;
+            textarea{
+                width: 100%;
+                background-color: #000;
+                color: white;
+                min-height: 50px;
+                resize: none;
+            }
+        }
+    }
+}

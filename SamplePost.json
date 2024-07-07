@@ -1,0 +1,13 @@
+{
+    "_apiRoute": "/api",
+    "Vols": [],
+    "Seittings": {
+        "Translate": "",
+        "Defination": "",
+        "Sentence": "",
+        "Media": "",
+        "DataSaver" : true,
+        "SentenceLimit": 10,
+        "Additionlimit": 10
+    }
+}
