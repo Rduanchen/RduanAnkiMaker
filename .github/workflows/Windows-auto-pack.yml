@@ -1,0 +1,68 @@
+
+name: Windows Package python
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+
+  auto-pack:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: install python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        
+    - name: install requirements
+      run: pip install -r requirements.txt
+        
+    - name: Install pyinstaller
+      run: pip install pyinstaller
+        
+    - name: pack exe file
+      run: |
+        pyinstaller --noconfirm --distpath output_app --onefile --console --add-data "./templates;templates/" "./App.py"
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: output_app
+        path: output_app/App.exe
+        
+  release-projects:
+    runs-on: windows-latest
+    needs: auto-pack
+    
+    steps:
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: output_app
+    - name: List downloaded files
+      run: ls -R
+        
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.run_number }}
+        release_name: Release ${{ github.run_number }}
+        
+    - name: Upload release files
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./App.exe
+        asset_name: RduanAnkiMaker-v${{ github.run_number }}.exe
+        asset_content_type: application/octet-stream
