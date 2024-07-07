@@ -7,12 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <!-- <link href="{{ url_for('static',filename = './1.css') }}" rel="stylesheet"> -->
-    <!-- <link href="{{ url_for('static',filename = './2.css') }}" rel="stylesheet"> -->
-      <link href="{{ url_for('static',filename = './3.css') }}" rel="stylesheet">
-    <!-- <link href="../static/2.css" rel="stylesheet"> -->
-    <!-- <link href="../static/1.css" rel="stylesheet"> -->
-    <!-- <link href="../static/3.css" rel="stylesheet"> -->
 </head>
 <body>
 <div id="index">
@@ -468,6 +462,124 @@
     app.mount('#index')
 </script>
 <style>
+.navbar {
+  background-color: #FCA311 !important;
+  padding: 1em;
+  height: 10vh;
+  margin-bottom: 3vh;
+}
+.navbar button {
+  background-color: #a2d2ff;
+  height: 3rem;
+  width: 5rem;
+}
+.navbar .BtnBlink {
+  animation: BtnColor 1s infinite;
+}
 
+button {
+  background-color: #FCA311;
+  color: white;
+  border: 1px solid #FCA311;
+  border-radius: 15px;
+  scale: 1;
+}
+
+button:hover {
+  scale: 1.1;
+}
+
+@keyframes BtnColor {
+  0% {
+    scale: 1;
+  }
+  50% {
+    scale: 1.1;
+  }
+  100% {
+    scale: 1;
+  }
+}
+.Container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 2em;
+}
+.Container .VolInput {
+  width: 20%;
+  padding: 0.5em;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #CAF0F8;
+  border-radius: 15px;
+  padding: 1rem;
+}
+.Container .VolInput textarea {
+  height: 90%;
+  margin-bottom: 1em;
+  padding: 0.5rem;
+}
+.Container .VolInput button {
+  height: 3rem;
+}
+.Container .OutPutWords {
+  width: 70%;
+  height: 85vh;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  overflow: auto;
+  background-color: #CAF0F8;
+  border-radius: 15px;
+}
+.Container .OutPutWords .spin {
+  align-self: center;
+  width: 15rem;
+}
+.Container .OutPutWords .WelcomeMsg {
+  align-self: center;
+  justify-self: center;
+  gap: 1em;
+  padding: 1em;
+  border-radius: 15px;
+}
+.Container .OutPutWords .functionbtn {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 1em;
+  margin-top: 1rem;
+}
+.Container .OutPutWords .functionbtn button {
+  background-color: #FCA311;
+  color: white;
+  border: none;
+  width: 40%;
+  padding: 0.5em;
+}
+.Container .OutPutWords .TranslateCard {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  gap: 1em;
+  width: 95%;
+  background-color: #e9edc9;
+  border: solid 3px #FCA311;
+  border-radius: 15px;
+  padding: 1rem;
+}
+.Container .OutPutWords .TranslateCard textarea {
+  width: 100%;
+  min-height: 10vh;
+  resize: none;
+  padding: 0.5rem;
+}
+.Container .OutPutWords .TranslateCard .Info {
+  display: flex;
+  padding: 0.5em;
+  gap: 2em;
+}/*# sourceMappingURL=3.css.map */
 </style>
 </html>
