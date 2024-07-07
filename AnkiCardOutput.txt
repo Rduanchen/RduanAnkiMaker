@@ -1,0 +1,3 @@
+#separator:tab
+#html:true
+<h2>orange</h2><audio controls><source src="https://s.yimg.com/bg/dict/dreye/live/m/orange.mp3" type="audio/mpeg"></audio>	<div class="RduanCard"><p>['a round sweet fruit that has a thick orange skin and an orange centre divided into many parts', 'a colour between red and yellow', 'of a colour between red and yellow']</p><p>['橙，柳橙[C]；橙色，橘黃色[U]', '橙的；橙色的，橘黃色的']</p><h3>造句</h3><p>['He bought a crate of oranges for his children. 他給孩子買了一箱柳橙。', 'How about some orange juice? 要喝點柳橙汁嗎？']</p></div>

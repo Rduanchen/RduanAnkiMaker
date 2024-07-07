@@ -1,0 +1,27 @@
+{
+    "Main":{
+        "Vol": "",
+        "KK": "",
+        "Defination":[],
+        "Sentence":[],
+        "Translate": ""
+    },
+    "Additional":{
+        "Cambridge": {
+            "KK": "",
+            "Datas":[
+                {
+                    "Type": "",
+                    "Translate": "",
+                    "Defination": "",
+                    "Sentence": ""
+                }
+            ]
+        },
+        "Yahoo": {
+            "Translate": "",
+            "Sentence": "",
+            "Media": ""
+        }
+    }
+}
