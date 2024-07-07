@@ -19,8 +19,7 @@ class AnkiHtml:
     def gap(self):
         self.AnkiText += "\t"
     def AnkiSoundTag(self,src):
-        src="RduanCard_"+src
-        self.AnkiText += f"[sound:RduanAnki{src}.mp3]"
+        self.AnkiText += "[sound:RduanAnki{}.mp3]".format(src)
     def AddDirectly(self,text):
         self.AnkiText += text
     def div_start(self):
