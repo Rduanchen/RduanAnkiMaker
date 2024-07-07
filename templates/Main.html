@@ -3,117 +3,471 @@
 <head>
     <title>Card Maker</title>
     <meta charset="utf-8" />
-    <!-- CSS only -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
-    <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <link href="{{ url_for('static',filename = './1.css') }}" rel="stylesheet"> -->
+    <!-- <link href="{{ url_for('static',filename = './2.css') }}" rel="stylesheet"> -->
+      <link href="{{ url_for('static',filename = './3.css') }}" rel="stylesheet">
+    <!-- <link href="../static/2.css" rel="stylesheet"> -->
+    <!-- <link href="../static/1.css" rel="stylesheet"> -->
+    <!-- <link href="../static/3.css" rel="stylesheet"> -->
 </head>
-<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <body>
 <div id="index">
-    <!-- As a heading -->
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-        <span class="navbar-brand mb-0 h1">Rduan Anki Deck Maker</span>
-        </div>
+    <nav class="navbar">
+        <h2>Rduan Anki Card Maker</h2>
+        <button type="button" @click="this.Seted = !this.Seted; this.SettingsOnChange = true" :class="{ 'BtnBlink': this.Seted == false }" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
+            設定
+        </button>
     </nav>
-    <div class="container mt-4" style="width: 70vw;">
-        <p class="h1">請輸入單字</p>
-        <div class="VolArear">
-            <div class="d-flex flex-row justify-content-start" v-for="(items,key) in Vol" :key="key">
-                <input type="text" class="form-control VolInput m-3" id="Vol" placeholder="輸入單字" v-model="Vol[key]">
-                <!-- 刪除卡片 -->
-                <button class="btn btn-danger m-3 text-nowrap" @click="deleteCard" v-if="key!=0">刪除</button>
-            </div>
-        </div>
-        <button class="btn btn-primary m-3" @click="addCard">新增</button>
-        <!-- 送出 -->
-        <button class="btn btn-primary m-3" @click="sentData">送出(製作純文字檔)</button>
-        <button class="btn btn-primary m-3" @click="sentData2">送出(製作音檔)</button>
-        <div class="ResCard" v-if="res!=null">
-            <h1>卡片區域</h1>
-            <div class="card text-dark bg-info mb-3" v-for="(items,key) in res" :key="key">
-                <div class="card-body" v-if="items.Translate!='error'">
-                    <h1 class="card-title">${items.Vol}</h1>
-                    <h3>${items.def}</h3>
-                    <div class="val" v-for="x in items.Translate">
-                        <p class="card-text">${x}</p>
-                    </div>
-                    <br>
-                    <p>造句</p>
-                    <div class="Sentence" v-for="s in items.Sentence">
-                        <p class="card-text">${s}</p>
-                    </div>
-                </div>
-                <div v-else>
-                    <p>翻譯文本有錯 or 程式問題</p>
-                </div>
-            </div>
-            <button class="btn btn-primary m-3"><a href="../api/ankitxt" target="_blank" class="text-white">下載文字檔</a></button>
-            <button class="btn btn-primary m-3"><a href="../api/download" target="_blank" class="text-white">下載音訊檔(zip)</a></button>
-        </div>
-        
+<div class="Container">
+    <div class="VolInput">
+        <p class="h2">請輸入文字</p>
+        <textarea v-model="Vols"></textarea>
+        <button @click="Submit">開始翻譯</button>
     </div>
+    <div class="OutPutWords">
+        <div class="WelcomeMsg" v-if="this.res == null">
+        <!-- <div class="WelcomeMsg"> -->
+            <p class="h2">歡迎使用Rduan Anki Card Maker</p>
+            <p>請輸入單字，並點擊開始翻譯</p>
+        </div>
+        <div class="d-flex align-items-center justify-content-evenly spin" v-if="loading == true">
+            <strong>Loading...</strong>
+            <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+        </div>
+        <div class="functionbtn">
+            <button @click="Download" v-if="this.res != null && SettingsOnChange != true">下載檔案</button>
+            <!-- <button @click="Media" v-if="this.res != null && this.Settings.MediaType == '是'">下載音訊</button> -->
+            <button v-if="this.res != null && this.Settings.MediaType == '是' && SettingsOnChange != true"><a href="./api/media">下載音檔</a></button>
+            <p v-if="SettingsOnChange == true">設定已經變更，請重新送出單字</p>
+            <!-- <button @click="Download" >下載檔案</button>
+            <button @click="Media" >下載音訊</button> -->
+        </div>
+        <div class="TranslateCard" v-for="(item,index) in res" @click="Select(index)" :class="{ 'OnclickIndex': (index == SelectedWordID) }">
+            <div class="Info">
+                <p class="h2">${item.Vol}</p>
+                <p>${item.KK}</p>
+                <audio controls>
+                    <source :src="item.Media" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                </audio>
+                <button @click="DeleteCard(index)">刪除卡片</button>
+            </div>
+            <div class="Def">
+                <p class="h4">定義</p>
+                <textarea v-model="item.Defination" oninput="auto_grow(this)"></textarea>
+            </div>
+            <div class="Vol">
+                <p class="h4">中文解釋</p>
+                <textarea v-model="item.Translate" oninput="auto_grow(this)"></textarea>
+            </div>
+            <div class="Sent">
+                <p class="h3">造句</p>
+                <textarea id="Sentence" v-model="item.Sentence" oninput="auto_grow(this)">
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="SourceData">
+        <div class="Index">
+            <p class="h3 Head">${SourceData[SelectedWordID].Vol }</p>
+            <p class="h4 Sect">英文定義</p>
+            <hr>
+            <div class="Def" v-for="item in SourceData[SelectedWordID].Defination">
+                <p class="h5 Title">${item.Source }</p>
+                <p v-for="i in item.Defination">
+                    ${i}
+                </p>
+            </div>
+            <p class="h4 Sect">英文翻譯</p>
+            <hr>
+            <div class="Translate" v-for="item in SourceData[SelectedWordID].Translate">
+                <p class="h5 Title">${item.Source }</p>
+                <p v-for="i in item.Translate">
+                    ${i}
+                </p>
+            </div>
+            <p class="h4 Sect">造句</p>
+            <hr>
+            <div class="Sent" v-for="item in SourceData[SelectedWordID].Sentence">
+                <p class="h5 Title">${item.Source }</p>
+                <p v-for="i in item.Sentence">
+                    ${i}
+                </p>
+            </div>
+        </div>
+    </div> -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <p class="h2 offcanvas-title" id="offcanvasExampleLabel">設定</p>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div class="form-group">
+                <label for="TranslateSource">中文解釋優先來源</label>
+                <select class="form-control" id="TranslateSource" v-model="Settings.TranslateSource">
+                    <option value="劍橋">劍橋</option>
+                    <option value="Yahoo">Yahoo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="DefinationSource">英文定義優先來源</label>
+                <select class="form-control" id="DefinationSource" v-model="Settings.DefinationSource">
+                    <option value="劍橋">劍橋</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="SentenceSource">造句優先來源</label>
+                <select class="form-control" id="SentenceSource" v-model="Settings.SentenceSource">
+                    <option value="劍橋">劍橋</option>
+                    <option >Yahoo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="KKSource">KK音標來源</label>
+                <select class="form-control" id="SentenceSource" v-model="Settings.KKSource">
+                    <option >劍橋</option>
+                    <option>Yahoo</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="SentenceSource">是否需要音檔</label>
+                <select class="form-control" id="SentenceSource" v-model="Settings.Media">
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </div>
+            <div class="form-group" v-if="Settings.Media == '是'">
+                <label for="SentenceSource">離線音檔(推薦Mac關閉)</label>
+                <select class="form-control" id="SentenceSource" v-model="Settings.MediaType">
+                    <option value="是">是</option>
+                    <option value="否">否</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="SentenceSource">句子數量限制</label>
+                <input type="number" class="form-control" id="SentenceSource" v-model="Settings.SentenceLimit">
+            </div>
+            <div class="form-group">
+                <label for="SentenceSource">定義數量限制</label>
+                <input type="number" class="form-control" id="SentenceSource" v-model="Settings.DefinationLimit">
+            </div>
+            <div class="form-group">
+                <label for="SentenceSource">翻譯數量限制(劍橋專用)</label>
+                <input type="number" class="form-control" id="SentenceSource" v-model="Settings.TranslateLimit">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <p class="text-white">${SubmitData}</p> -->
 </div>
 </body>
 <script>
+    function auto_grow(element) {
+        element.style.height = "5px";
+        element.style.height = (element.scrollHeight) + "px";
+    }
     const app = Vue.createApp({
         delimiters: ['${', '}'],
         data() {
             return {
+                SettingsOnChange: false,
                 Vol : [''],
+                Seted : false,
+                loading : false,
                 res : null,
-                media_click :false
+                media_click :false,
+                Def: [],
+                Vols:"",
+                SubmitData: {
+                    Vols: []
+                },
+                SelectedWordID: 0,
+                Settings:{
+                    TranslateSource: "Yahoo",
+                    DefinationSource: "劍橋",
+                    SentenceSource: "Yahoo",
+                    KKSource: "Yahoo",
+                    MediaType: "是",
+                    SentenceLimit: 3,
+                    DefinationLimit: 3,
+                    Media: "是",
+                },
+                ReplyDatas : [
+                    {
+                        Vol: 'Apple',
+                        kk: '`æp!',
+                        Translate: `蘋果`,
+                        Defination: `A round fruit with red or green skin and a whitish interior.`,
+                        Sentence: `I like to eat apple.\nI like to eat apple.`
+                    },
+                    {
+                        Vol: 'Banana',
+                        kk: 'bəˈnɑː.nə',
+                        Translate: `香蕉`,
+                        Defination: `A long, curved fruit with a yellow skin and soft, sweet, white flesh inside.`,
+                        Sentence: `I like to eat banana.\nI like to eat banana.`
+                    }
+                ],
+                SourceData : [
+                    {
+                        Vol: 'Apple',
+                        kk: '`æp!',
+                        Translate: [
+                            {
+                                "Source": "劍橋",
+                                "Translate": ["蘋果1"]
+                            },
+                            {
+                                "Source": "牛津",
+                                "Translate": ["蘋果2"]
+                            },
+                            {
+                                "Source": "Yahoo",
+                                "Translate": ["蘋果3"]
+                            }
+                        ],
+                        Defination: [
+                            {
+                                "Source": "劍橋",
+                                "Defination": ["A round fruit with red or green skin and a whitish interior."]
+                            },
+                            {
+                                "Source": "牛津",
+                                "Defination": ["A round fruit with red or green skin and a whitish interior."]
+                            }
+                        ],
+                        Sentence: [
+                            {
+                                "Source": "劍橋",
+                                "Sentence": ["I like to eat apple."]
+                            },
+                            {
+                                "Source": "牛津",
+                                "Sentence": ["I like to eat apple."]
+                            },
+                            {
+                                "Source": "Yahoo",
+                                "Sentence": ["I like to eat apple."]
+                            }
+                        ]
+                    },
+                    {
+                        Vol: 'Banana',
+                        kk: 'bəˈnɑː.nə',
+                        Translate: [
+                            {
+                                "Source": "劍橋",
+                                "Translate": ["香蕉1"]
+                            },
+                            {
+                                "Source": "牛津",
+                                "Translate": ["香蕉2"]
+                            },
+                            {
+                                "Source": "Yahoo",
+                                "Translate": ["香蕉3"]
+                            }
+                        ],
+                        Defination: [
+                            {
+                                "Source": "劍橋",
+                                "Defination": ["A long, curved fruit with a yellow skin and soft, sweet, white flesh inside."]
+                            },
+                            {
+                                "Source": "牛津",
+                                "Defination": ["A long, curved fruit with a yellow skin and soft, sweet, white flesh inside."]
+                            }
+                        ],
+                        Sentence: [
+                            {
+                                "Source": "劍橋",
+                                "Sentence": ["I like to eat banana."]
+                            },
+                            {
+                                "Source": "牛津",
+                                "Sentence": ["I like to eat banana."]
+                            },
+                            {
+                                "Source": "Yahoo",
+                                "Sentence": ["I like to eat banana."]
+                            }
+                        ]
+                    }
+                ]
             }
         },
         methods: {
-            addCard() {
-                this.Vol.push('')
-            },
-            deleteCard(key) {
-                this.Vol.splice(key,1)
-            },
-            sentData() {
-                media_click = false;
-                console.log(this.Vol)
-                axios.post('/api', {
-                    Vol: this.Vol
-                })
+            Test(){
+                let a = {
+                    "_apiRoute": "/api",
+                    "Vols": ['apple','water'],
+                    "Settings": {
+                        "Translate": "Cambridge",
+                        "Defination": "Cambridge",
+                        "KK": "Yahoo",
+                        "Sentence": "Cambridge",
+                        "Media": "Cambridge",
+                        "DataSaver" : true,
+                        "SentenceLimit": 5,
+                        "Additionlimit": 5,
+                        "Limit" : 5
+                    }
+                }
+                axios.post('/api', a)
                 .then(response => {
-                // 请求成功处理
-                    this.res = response.data.Translate
-                    console.log(res)
+                    // 請求成功處理
+                    this.res = response.data
+                    console.log(this.res)
                 })
-                .catch(error => {
-                // 请求失败处理
+            },
+            Submit(){
+                // 進行數據預處理
+                // 1. 將輸入的數據進行分割
+                this.loading = true
+                this.SettingsOnChange = false
+                this.Vol = this.Vols.split('\n')
+                console.log(this.Vol)
+                this.SubmitData = {
+                    Vols: this.Vols.split('\n'),
+                    Settings: {
+                        "Translate": "",
+                        "Defination": "",
+                        "KK": "",
+                        "Sentence": "",
+                        "Media": "",
+                        "DataSaver" : true,
+                        "SentenceLimit": 5,
+                        "DefinationLimit": 5,
+                        "TranslateLimit": 5,
+                    }
+                }
+                if (this.Settings.TranslateSource == "劍橋"){
+                    this.SubmitData.Settings.Translate = "Cambridge"
+                }else{
+                    this.SubmitData.Settings.Translate = "Yahoo"
+                }
+
+                this.SubmitData.Settings.Defination = "Cambridge"
+
+                if (this.Settings.SentenceSource == "劍橋"){
+                    this.SubmitData.Settings.Sentence = "Cambridge"
+                }else{
+                    this.SubmitData.Settings.Sentence = "Yahoo"
+                }
+
+                if (this.Settings.Media == "是"){
+                    this.SubmitData.Settings.Media = true
+                }else{
+                    this.SubmitData.Settings.Media = false
+                }
+
+                if (this.Settings.KKSource == "劍橋"){
+                    this.SubmitData.Settings.KK = "Cambridge"
+                }else{
+                    this.SubmitData.Settings.KK = "Yahoo"
+                }
+
+                if (this.Settings.SentenceLimit != undefined){
+                    this.SubmitData.Settings.SentenceLimit = this.Settings.SentenceLimit
+                }
+                else{
+                    this.SubmitData.Settings.SentenceLimit = 3
+                }
+
+                if (this.Settings.DefinationLimit != undefined){
+                    this.SubmitData.Settings.DefinationLimit = this.Settings.DefinationLimit
+                }
+                else{
+                    this.SubmitData.Settings.DefinationLimit = 3
+                }
+                
+                if (this.Settings.TranslateLimit != undefined){
+                    this.SubmitData.Settings.TranslateLimit = this.Settings.TranslateLimit
+                }
+                else{
+                    this.SubmitData.Settings.TranslateLimit = 3
+                }
+
+                if (this.Settings.Media == "否"){
+                    this.SubmitData.Settings.Media = false
+                }else{
+                    this.SubmitData.Settings.Media = true
+                }
+
+                if (this.Settings.MediaType == "否"){
+                    this.SubmitData.Settings.MediaType = false
+                }else{
+                    this.SubmitData.Settings.MediaType = true
+                }
+                axios.post('/api', this.SubmitData)
+                .then(response => {
+                    // 請求成功處理
+                    this.res = response.data
+                    console.log(this.res)
+                    this.loading = false
+                }).catch(error => {
+                    // 請求失敗處理
                     console.error(error);
+                    this.loading = false
+                });
+                
+            },
+            Select(index){
+                this.SelectedWordID = index
+            },
+            Download(){
+                this.loading = true
+                axios.post('/api/download', this.res)
+                .then(response => {
+                    // 請求成功處理
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'AnkiCard.txt');
+                    document.body.appendChild(link);
+                    link.click();
+                    this.loading = false
+                }).catch(error => {
+                    // 請求失敗處理
+                    console.error(error);
+                    console.error(error);
+                    this.loading = false
+
                 });
             },
-            // 含有media
-            sentData2(){
-                media_click = true;
-                console.log(this.Vol)
-                axios.post('/api/media', {
-                    Vol: this.Vol
-                })
+            Media(){
+                this.loading = true
+                axios.get('/api/media')
                 .then(response => {
-                // 请求成功处理
-                    this.res = response.data.Translate
-                    console.log(res)
-                })
-                .catch(error => {
-                // 请求失败处理
+                    // 請求成功處理
+                    const url = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.setAttribute('download', 'Media.zip');
+                    document.body.appendChild(link);
+                    link.click();
+                    this.loading = false
+                }).catch(error => {
+                    // 請求失敗處理
                     console.error(error);
+                    this.loading = false
                 });
+            },
+            DeleteCard(index){
+                this.res.splice(index,index)
+            },
+            Set(){
+                this.Seted = !this.Seted
             }
         }
     })
     app.mount('#index')
 </script>
 <style>
-.VolInput{
-    width: 80%;
-}
+
 </style>
 </html>

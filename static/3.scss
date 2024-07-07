@@ -1,0 +1,116 @@
+.navbar{
+    background-color: #FCA311 !important;
+    padding: 1em;
+    height: 10vh;
+    margin-bottom: 3vh;
+    button{
+        background-color: #a2d2ff;
+        height: 3rem;
+        width: 5rem;
+    }
+    .BtnBlink{
+        animation: BtnColor 1s infinite;
+    }
+}
+button{
+    background-color: #FCA311;
+    color: white;
+    border: 1px solid #FCA311;
+    border-radius: 15px;
+    scale: 1;
+}
+button:hover{
+    scale: 1.1;   
+}
+@keyframes BtnColor {
+    0%{
+        scale: 1;
+    }
+    50%{
+        scale: 1.1;
+    }
+    100%{
+        scale: 1;
+    }
+}
+.Container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 2em;
+    .VolInput{
+        width: 20%;
+        padding: 0.5em;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #CAF0F8;
+        border-radius: 15px;
+        padding: 1rem;
+        textarea{
+            height: 90%;
+            margin-bottom: 1em;
+            padding: 0.5rem;
+        }
+        button{
+            height: 3rem;
+        }
+    }
+    .OutPutWords{
+        width: 70%;
+        height: 85vh;
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+        overflow: auto;
+        background-color: #CAF0F8;
+        border-radius: 15px;
+        .spin{
+            align-self: center;   
+            width: 15rem;
+        }
+        .WelcomeMsg{
+            align-self: center;
+            justify-self: center;
+            gap: 1em;
+            padding: 1em;
+            border-radius: 15px;
+        }
+        .functionbtn{
+            display: flex;
+            justify-content: space-evenly;
+            gap: 1em;
+            margin-top: 1rem;
+            button{
+                background-color: #FCA311;
+                color: white;
+                border: none;
+                width: 40%;
+                padding: 0.5em;
+            }
+        }
+        .TranslateCard{
+            display: flex;
+            flex-direction: column;
+            align-self: center;
+            gap: 1em;
+            width: 95%;
+            background-color: #e9edc9;
+            border: solid 3px #FCA311;
+            border-radius: 15px;
+            padding: 1rem;
+            textarea{
+                width: 100%;
+                min-height: 10vh;
+                resize: none;
+                padding: 0.5rem;
+            }
+            .Info{
+                display: flex;
+                padding: 0.5em;
+                gap: 2em;
+            }
+        }
+    }
+}

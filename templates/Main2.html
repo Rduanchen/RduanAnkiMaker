@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Card Maker</title>
+    <meta charset="utf-8" />
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</head>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<body>
+<div id="index">
+    <!-- As a heading -->
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">Rduan Anki Deck Maker</span>
+        </div>
+    </nav>
+    <div class="container mt-4" style="width: 70vw;">
+        <p class="h1">請輸入單字</p>
+        <div class="VolArear">
+            <div class="d-flex flex-row justify-content-start" v-for="(items,key) in Vol" :key="key">
+                <input type="text" class="form-control VolInput m-3" id="Vol" placeholder="輸入單字" v-model="Vol[key]">
+                <!-- 刪除卡片 -->
+                <button class="btn btn-danger m-3 text-nowrap" @click="deleteCard" v-if="key!=0">刪除</button>
+            </div>
+        </div>
+        <button class="btn btn-primary m-3" @click="addCard">新增</button>
+        <!-- 送出 -->
+        <button class="btn btn-primary m-3" @click="sentData">送出(製作純文字檔)</button>
+        <button class="btn btn-primary m-3" @click="sentData2">送出(製作音檔)</button>
+        <div class="ResCard" v-if="res!=null">
+            <h1>卡片區域</h1>
+            <div class="card text-dark bg-info mb-3" v-for="(items,key) in res" :key="key">
+                <div class="card-body" v-if="items.Translate!='error'">
+                    <h1 class="card-title">${items.Vol}</h1>
+                    <h3>${items.def}</h3>
+                    <div class="val" v-for="x in items.Translate">
+                        <p class="card-text">${x}</p>
+                    </div>
+                    <br>
+                    <p>造句</p>
+                    <div class="Sentence" v-for="s in items.Sentence">
+                        <p class="card-text">${s}</p>
+                    </div>
+                </div>
+                <div v-else>
+                    <p>翻譯文本有錯 or 程式問題</p>
+                </div>
+            </div>
+            <button class="btn btn-primary m-3"><a href="../api/ankitxt" target="_blank" class="text-white">下載文字檔</a></button>
+            <button class="btn btn-primary m-3"><a href="../api/download" target="_blank" class="text-white">下載音訊檔(zip)</a></button>
+        </div>
+        
+    </div>
+</div>
+</body>
+<script>
+    const app = Vue.createApp({
+        delimiters: ['${', '}'],
+        data() {
+            return {
+                Vol : [''],
+                res : null,
+                media_click :false
+            }
+        },
+        methods: {
+            addCard() {
+                this.Vol.push('')
+            },
+            deleteCard(key) {
+                this.Vol.splice(key,1)
+            },
+            sentData() {
+                media_click = false;
+                console.log(this.Vol)
+                axios.post('/api', {
+                    Vol: this.Vol
+                })
+                .then(response => {
+                // 请求成功处理
+                    this.res = response.data.Translate
+                    console.log(res)
+                })
+                .catch(error => {
+                // 请求失败处理
+                    console.error(error);
+                });
+            },
+            // 含有media
+            sentData2(){
+                media_click = true;
+                console.log(this.Vol)
+                axios.post('/api/media', {
+                    Vol: this.Vol
+                })
+                .then(response => {
+                // 请求成功处理
+                    this.res = response.data.Translate
+                    console.log(res)
+                })
+                .catch(error => {
+                // 请求失败处理
+                    console.error(error);
+                });
+            }
+        }
+    })
+    app.mount('#index')
+</script>
+<style>
+.VolInput{
+    width: 80%;
+}
+</style>
+</html>
