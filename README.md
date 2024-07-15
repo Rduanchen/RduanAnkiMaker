@@ -47,28 +47,8 @@ On Linux, recent Anki versions store your data in ~/.local/share/Anki2, or $XDG_
 
 
 ## 匯入Anki
-1. 在匯入Anki 的時候，一定要將 "允許html"的功能打開，才能使卡片被正確渲染
-2. 本專案有提供一個卡片靠左對齊的樣式可以選擇，如下:
-```
-.card {
-    font-family: arial;
-    font-size: 20px;
-    text-align: center;
-    color: black;
-    background-color: white;
-		 display: flex;
-		 flex-direction: column;
-	  justify-content: center;
-}
-.RduanCard{
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	text-align: start;
-	align-items: flex-start;
-}
-```
-至於怎麼樣加入anki卡片中，請看以下的官方文件:
+在匯入Anki 的時候，一定要將 "允許html"的功能打開，才能使卡片被正確渲染
+如果您不知道怎麼樣加入anki卡片中，請看以下的官方文件:
 https://docs.ankiweb.net/templates/styling.html
 
 
@@ -80,8 +60,10 @@ https://docs.ankiweb.net/templates/styling.html
    
 
 # Todo
-1. Windows 的exe檔
-2. Mac 的exe檔
+* ~~Windows 的exe檔~~ (Solved)
+* Mac 的exe檔
+* KK 音標
+* 下載音檔會出現的bug
 
 # 版本歷程
 * 0.1.0
