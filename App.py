@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, send_from_directory 
 import os
 import zipfile
 import io
@@ -96,6 +96,7 @@ def download():
     Text = AH()
     for i in data:
         Text.H2_tag(i["Vol"])
+        Text.p_tag(i["KK"])
         if MediaSetting:
             if MediaType:
                 Text.AnkiSoundTag(i["Vol"])
@@ -125,6 +126,11 @@ def download_media():
         download_name='Media.zip',
         mimetype='application/zip'
     )
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/png')
+
 def oppen_browser():
     subprocess.Popen(['start', '', 'http://127.0.0.1:5990'], shell=True)
 if __name__ == '__main__':

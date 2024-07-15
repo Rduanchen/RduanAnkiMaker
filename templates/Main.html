@@ -7,11 +7,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}"> -->
 </head>
 <body>
 <div id="index">
     <nav class="navbar">
-        <h2>Rduan Anki Card Maker</h2>
+        <!-- <img src="{{ url_for('static', filename='favicon.png') }}" alt="Logo"> -->
+         <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='favicon.png') }}" alt="Logo" width="30" height="30" class="d-inline-block align-top">
+            Rduan Anki Card Maker
+         </a>
+         <p class="h2"></p>
         <button type="button" @click="this.Seted = !this.Seted; this.SettingsOnChange = true" :class="{ 'BtnBlink': this.Seted == false }" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">
             設定
         </button>
@@ -463,15 +469,25 @@
 </script>
 <style>
 .navbar {
-  background-color: #FCA311 !important;
-  padding: 1em;
-  height: 10vh;
-  margin-bottom: 3vh;
+    background-color: #e2e53f !important;
+    padding: 1em;
+    /* height: 10vh; */
+    margin-bottom: 3vh;
+     display: flex;
+}
+.navbar img {
+    width: auto;
+    max-height: 6vh;
+}
+.navbar h2 {
+    margin-left: 1em;
+    align-self: start;
 }
 .navbar button {
+    align-self: end;
   background-color: #a2d2ff;
-  height: 3rem;
-  width: 5rem;
+  height: 2.5rem;
+  width: 7rem;
 }
 .navbar .BtnBlink {
   animation: BtnColor 1s infinite;
