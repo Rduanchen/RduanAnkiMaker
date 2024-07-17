@@ -63,9 +63,12 @@ https://docs.ankiweb.net/templates/styling.html
 
 # Todo
 * ~~Windows 的exe檔~~ (Solved)
-* Mac 的exe檔
-* KK 音標
+* ~~Mac 的exe檔~~
+* ~~KK 音標~~
 * 下載音檔會出現的bug
+* 過難的單字將不會出現音檔
+* 加入牛津字典
+* 加入collins 字典
 
 # 版本歷程
 * 0.1.0
