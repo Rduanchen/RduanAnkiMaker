@@ -1,6 +1,6 @@
 # RduanAnkiMaker 
 
-# 這個專案已經不再維護，新的專案正在建置中，詳情請見 [新專案連結](https://github.com/Rduanchen/AnkiCardMaker)
+# 這個專案已經不再維護，新的專案正在建置中，詳情請見[新專案](https://github.com/Rduanchen/anki-card-maker) (Rduanchen/anki-car-maker)
 
 > V.1.0.0
 ![alt text](https://raw.githubusercontent.com/Rduanchen/RduanAnkiMaker/main/image.png)
